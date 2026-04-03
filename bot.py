@@ -33,10 +33,13 @@ class RegistroModal(Modal, title="📋 Registro — BOPEANÇA"):
         rg_formatado = self.rg.value.strip()
         novo_apelido = f"{nome_formatado} |__| {rg_formatado}"
 
+        apelido_aviso = ""
         try:
             await interaction.user.edit(nick=novo_apelido)
         except discord.Forbidden:
-            pass
+            apelido_aviso = "\n\n⚠️ **Não foi possível alterar seu apelido automaticamente.** Altere manualmente para: `" + novo_apelido + "`"
+        except discord.HTTPException as e:
+            apelido_aviso = f"\n\n⚠️ Erro ao alterar apelido: `{e}`"
 
         cargo = interaction.guild.get_role(CARGO_AGUARDANDO_ID)
         if cargo:
@@ -51,7 +54,12 @@ class RegistroModal(Modal, title="📋 Registro — BOPEANÇA"):
         embed = discord.Embed(
             title="✅ Registro Concluído!",
             color=discord.Color.green(),
-            description=f"**Nome no Jogo:** {nome_formatado}\n**RG:** {rg_formatado}\n\nAgora vá para <#{CANAL_PATENTE_ID}> e solicite sua patente!"
+            description=(
+                f"**Nome no Jogo:** {nome_formatado}\n"
+                f"**RG:** {rg_formatado}\n\n"
+                f"Agora vá para <#{CANAL_PATENTE_ID}> e solicite sua patente!"
+                f"{apelido_aviso}"
+            )
         )
         embed.set_footer(text="Bem-vindo ao BOPE FRANÇA!")
         await interaction.response.send_message(embed=embed, ephemeral=True)
