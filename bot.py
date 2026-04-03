@@ -31,7 +31,7 @@ class RegistroModal(Modal, title="📋 Registro — BOPEANÇA"):
 
         nome_formatado = self.nome.value.strip().capitalize()
         rg_formatado = self.rg.value.strip()
-        novo_apelido = f"{nome_formatado} |__| {rg_formatado}"
+        novo_apelido = f"{nome_formatado} | {rg_formatado}"
 
         apelido_aviso = ""
         try:
